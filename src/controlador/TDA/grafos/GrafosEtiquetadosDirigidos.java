@@ -73,12 +73,14 @@ public class GrafosEtiquetadosDirigidos<E> extends GrafoDirigido {
            throw new LabelEdgeException();
       
    } 
+   
    //Método principal
    public void labelVertice(Integer v,E label){
        labels[v]=label;
        dicVertices.put(label, v);
        
    }
+   
    public Boolean isAllLabelIsGraph(){
        Boolean band=true;
        for (int i = 1; i < labels.length; i++) {
