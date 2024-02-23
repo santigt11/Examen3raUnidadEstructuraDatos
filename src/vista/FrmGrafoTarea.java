@@ -10,9 +10,12 @@ import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
 import controlador.Utiles.UtilesFoto;
 import controlador.utiles.Utilidades;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Actividad;
 import modelo.Tarea;
+import vista.Utilidades.UtilVistaActividad;
 import vista.tablas.ModeloAdyacenciaFloyd;
 
 /**
@@ -27,7 +30,7 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
     /**
      * Creates new form FrmActividad
      */
-    public FrmGrafoTarea(Actividad actividad, DynamicList<Tarea> tareas) {
+    public FrmGrafoTarea(Actividad actividad, DynamicList<Tarea> tareas) throws Exception {
         initComponents();
         controlActividad.setActividad(actividad);
         this.tareas = tareas;
@@ -47,10 +50,10 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
         tblMostrar.updateUI();
 
     }
-    private void limpiar() {
+    private void limpiar() throws Exception {
         try {
-            UtilVistaPozo.cargarComboPoste(cbxOrigen);
-            UtilVistaPozo.cargarComboPoste(cbxDestino);
+            UtilVistaActividad .cargarComboPoste(cbxOrigen);
+            UtilVistaActividad .cargarComboPoste(cbxDestino);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -67,7 +70,7 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
             int i = JOptionPane.showConfirmDialog(null, "Esta seguro de cargar el grafo?");
             if (i == JOptionPane.OK_OPTION) {
                 System.out.println("HoLA");
-                pozoControl.loadGrapgFloydBellman();
+                controlActividad.loadGraph();
                 limpiar();
                 JOptionPane.showMessageDialog(null, "Grafo cargado con exito");
             }
@@ -82,8 +85,8 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
                     "Advertencia", JOptionPane.OK_CANCEL_OPTION);
 
             if (i == JOptionPane.OK_OPTION) {
-                if (pozoControl.getGrafo() != null) {
-                    pozoControl.guardarGrafoFloydBellman();
+                if (controlActividad.getGrafo() != null) {
+                    controlActividad.guardarGrafo();
                     JOptionPane.showMessageDialog(null, "Grafo guardado");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se puede guardar un grafo vacio");
@@ -114,25 +117,25 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
 
     private void mostrarGrafo() throws Exception {
         PaintGraph p = new PaintGraph();
-        p.updateFile(pozoControl.getGrafo());
+        p.updateFile(controlActividad.getGrafo());
         Utilidades.abrirNavegadorPredeterminadorWindows("d3/grafo.html");
     }
     private void buscar() throws Exception {
         if ("Busqueda_Profundidad".equals(cbxBuscar.getSelectedItem().toString())) {
             System.out.println("Busqueda_Profundidad");
-            JOptionPane.showMessageDialog(null, pozoControl.getGrafo().DFS(1));
+            JOptionPane.showMessageDialog(null, controlActividad.getGrafo().DFS(1));
         } else if ("Busqueda_Anchura".equals(cbxBuscar.getSelectedItem().toString())) {
             System.out.println("Busqueda_Anchura");
-            JOptionPane.showMessageDialog(null,pozoControl.getGrafo().BFS());
+            JOptionPane.showMessageDialog(null,controlActividad.getGrafo().BFS());
         }
     }
     private void mostrarGrafoFloyd() throws EmptyException, Exception {
         if ("Bellman_Ford".equals(cbxGrafo.getSelectedItem().toString())) {
             System.out.println("Bellman_Ford");
-            JOptionPane.showMessageDialog(null, pozoControl.getGrafo().encontrarRutaMasCortaBellman(cbxOrigen.getSelectedIndex() + 1, cbxDestino.getSelectedIndex() + 1));
+            JOptionPane.showMessageDialog(null, controlActividad.getGrafo().encontrarRutaMasCortaBellman(cbxOrigen.getSelectedIndex() + 1, cbxDestino.getSelectedIndex() + 1));
         } else if ("Floyd".equals(cbxGrafo.getSelectedItem().toString())) {
             System.out.println("Floyd");
-            JOptionPane.showMessageDialog(null, pozoControl.getGrafo().encontrarRutaMasCorta(cbxOrigen.getSelectedIndex() + 1, cbxDestino.getSelectedIndex() + 1));
+            JOptionPane.showMessageDialog(null, controlActividad.getGrafo().encontrarRutaMasCorta(cbxOrigen.getSelectedIndex() + 1, cbxDestino.getSelectedIndex() + 1));
         }
 
     }
@@ -336,7 +339,11 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmGrafoTarea().setVisible(true);
+                try {
+                    new FrmGrafoTarea(new Actividad(), new DynamicList<>()).setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(FrmGrafoTarea.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
