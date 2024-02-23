@@ -8,7 +8,6 @@ import controlador.DAO.grafosEjemplo.ActividadDao;
 import controlador.TDA.grafos.PaintGraph;
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
-import controlador.Utiles.UtilesFoto;
 import controlador.utiles.Utilidades;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,9 +22,10 @@ import vista.tablas.ModeloAdyacenciaFloyd;
  * @author Santiago
  */
 public class FrmGrafoTarea extends javax.swing.JFrame {
+
     private ModeloAdyacenciaFloyd maf = new ModeloAdyacenciaFloyd();
-    private ActividadDao controlActividad=new ActividadDao();
-    
+    private ActividadDao controlActividad = new ActividadDao();
+
     /**
      * Creates new form FrmActividad
      */
@@ -36,6 +36,7 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
         this.setLocationRelativeTo(this);
         limpiar();
     }
+
     private void cargarTabla() throws Exception {
         try {
             maf.setGrafoTarea(controlActividad.getGrafo());
@@ -47,6 +48,7 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
         tblMostrar.updateUI();
 
     }
+
     private void limpiar() throws Exception {
         try {
             UtilVistaActividad.cargarComboTareas(controlActividad.getTareas(), cbxOrigen);
@@ -93,38 +95,23 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    private void Adyacencia() {
-//        try {
-//            Integer o = cbxOrigen.getSelectedIndex();
-//            Integer d = cbxDestino.getSelectedIndex();
-//            if (o.intValue() == d.intValue()) {
-//                JOptionPane.showMessageDialog(null, "Escoja escuelas diferentes");
-//            } else {
-////                Double dist = UtilesVistaEscuela.CalcularDistanciaEscuela(ed.getList().getInfo(o), ed.getList().getInfo(d));
-////                dist = UtilesFoto.redondear(dist);
-////                ed.getGrafo().insertEdge(ed.getList().getInfo(o), ed.getList().getInfo(d), dist);
-////                JOptionPane.showMessageDialog(null, "Adyacencia Generada");
-//                limpiar();
-//            }
-//        } catch (Exception e) {
-//            System.out.println(":c");
-//        }
-try {
-    Integer o = cbxOrigen.getSelectedIndex();
-    Integer d = cbxDestino.getSelectedIndex();
-    
-    if (o.intValue() == d.intValue()) {
-        JOptionPane.showMessageDialog(null, "Escoja escuelas diferentes");
-    } else {
-        double nro_tarea1 = ;
-        double nro_taraFf = // Obtener el valor correspondiente;      
-        double resultado = Math.sqrt(nro_tarea1) + nro_taraFf + 1 / (nro_tarea1 + nro_taraFf);   
-        limpiar();
-    }
-} catch (Exception e) {
-    System.out.println(":c");
-}
 
+    private void adyacencia() {
+        try {
+            Integer o = cbxOrigen.getSelectedIndex();
+            Integer d = cbxDestino.getSelectedIndex();
+            if (o.intValue() == d.intValue()) {
+                JOptionPane.showMessageDialog(null, "Escoja escuelas diferentes");
+            } else {
+                double nro_tarea1 = o;
+                double nro_taraFf = d;
+                double resultado = (Math.sqrt(nro_tarea1) + nro_taraFf + 1) / (nro_tarea1 + nro_taraFf);
+                controlActividad.getGrafo().insertEdge(controlActividad.getTareas().getInfo(o), controlActividad.getTareas().getInfo(d), resultado);
+                JOptionPane.showMessageDialog(null, "Adyacencia correcta");
+            }
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
     }
 
     private void mostrarGrafo() throws Exception {
@@ -132,15 +119,17 @@ try {
         p.updateFile(controlActividad.getGrafo());
         Utilidades.abrirNavegadorPredeterminadorWindows("d3/grafo.html");
     }
+
     private void buscar() throws Exception {
         if ("Busqueda_Profundidad".equals(cbxBuscar.getSelectedItem().toString())) {
             System.out.println("Busqueda_Profundidad");
             JOptionPane.showMessageDialog(null, controlActividad.getGrafo().DFS(1));
         } else if ("Busqueda_Anchura".equals(cbxBuscar.getSelectedItem().toString())) {
             System.out.println("Busqueda_Anchura");
-            JOptionPane.showMessageDialog(null,controlActividad.getGrafo().BFS());
+            JOptionPane.showMessageDialog(null, controlActividad.getGrafo().BFS());
         }
     }
+
     private void mostrarGrafoFloyd() throws EmptyException, Exception {
         if ("Bellman_Ford".equals(cbxGrafo.getSelectedItem().toString())) {
             System.out.println("Bellman_Ford");
@@ -151,9 +140,6 @@ try {
         }
 
     }
-    
-
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -233,6 +219,11 @@ try {
 
         btnAdyacencia.setBackground(new java.awt.Color(255, 0, 0));
         btnAdyacencia.setText("Generar Adyacencias");
+        btnAdyacencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdyacenciaActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnAdyacencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 40, -1, -1));
 
         cbxGrafo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Floyd", "Bellman_Ford" }));
@@ -319,6 +310,15 @@ try {
             System.out.println(ex.getMessage());
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnAdyacenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdyacenciaActionPerformed
+        try {
+            adyacencia();
+            limpiar();
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        }
+    }//GEN-LAST:event_btnAdyacenciaActionPerformed
 
     /**
      * @param args the command line arguments
