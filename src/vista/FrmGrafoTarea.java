@@ -94,21 +94,37 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
         }
     }
     private void Adyacencia() {
-        try {
-            Integer o = cbxOrigen.getSelectedIndex();
-            Integer d = cbxDestino.getSelectedIndex();
-            if (o.intValue() == d.intValue()) {
-                JOptionPane.showMessageDialog(null, "Escoja escuelas diferentes");
-            } else {
-//                Double dist = UtilesVistaEscuela.CalcularDistanciaEscuela(ed.getList().getInfo(o), ed.getList().getInfo(d));
-//                dist = UtilesFoto.redondear(dist);
-//                ed.getGrafo().insertEdge(ed.getList().getInfo(o), ed.getList().getInfo(d), dist);
-//                JOptionPane.showMessageDialog(null, "Adyacencia Generada");
-                limpiar();
-            }
-        } catch (Exception e) {
-            System.out.println(":c");
-        }
+//        try {
+//            Integer o = cbxOrigen.getSelectedIndex();
+//            Integer d = cbxDestino.getSelectedIndex();
+//            if (o.intValue() == d.intValue()) {
+//                JOptionPane.showMessageDialog(null, "Escoja escuelas diferentes");
+//            } else {
+////                Double dist = UtilesVistaEscuela.CalcularDistanciaEscuela(ed.getList().getInfo(o), ed.getList().getInfo(d));
+////                dist = UtilesFoto.redondear(dist);
+////                ed.getGrafo().insertEdge(ed.getList().getInfo(o), ed.getList().getInfo(d), dist);
+////                JOptionPane.showMessageDialog(null, "Adyacencia Generada");
+//                limpiar();
+//            }
+//        } catch (Exception e) {
+//            System.out.println(":c");
+//        }
+try {
+    Integer o = cbxOrigen.getSelectedIndex();
+    Integer d = cbxDestino.getSelectedIndex();
+    
+    if (o.intValue() == d.intValue()) {
+        JOptionPane.showMessageDialog(null, "Escoja escuelas diferentes");
+    } else {
+        double nro_tarea1 = ;
+        double nro_taraFf = // Obtener el valor correspondiente;      
+        double resultado = Math.sqrt(nro_tarea1) + nro_taraFf + 1 / (nro_tarea1 + nro_taraFf);   
+        limpiar();
+    }
+} catch (Exception e) {
+    System.out.println(":c");
+}
+
     }
 
     private void mostrarGrafo() throws Exception {
