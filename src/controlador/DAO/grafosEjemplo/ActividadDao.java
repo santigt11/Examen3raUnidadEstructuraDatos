@@ -4,6 +4,7 @@
  */
 package controlador.DAO.grafosEjemplo;
 
+import Controlador.TDA.grafos.GrafoFloydBellman;
 import controlador.DAO.DaoImplement;
 import controlador.TDA.grafos.GrafosEtiquetadosDirigidos;
 import controlador.TDA.listas.DynamicList;
@@ -20,7 +21,7 @@ public class ActividadDao extends DaoImplement<Actividad> {
 
     private DynamicList<Tarea> tareas = new DynamicList<>();
     private Actividad actividad;
-    private GrafosEtiquetadosDirigidos<Tarea> grafo;
+    private GrafoFloydBellman<Tarea> grafo;
 
     public DynamicList<Tarea> getTareas() {
         if (tareas.isEmpty()) {
@@ -64,7 +65,7 @@ public class ActividadDao extends DaoImplement<Actividad> {
         if (grafo == null) {
             DynamicList<Tarea> list = getTareas();
             if (!list.isEmpty()) {
-                grafo = new GrafosEtiquetadosDirigidos(list.getLength(), Tarea.class);
+                grafo = new GrafoFloydBellman(list.getLength(), Tarea.class);
                 for (int i = 0; i < list.getLength(); i++) {
                     grafo.labelVertice((i + 1), list.getInfo(i));
                 }
@@ -74,7 +75,7 @@ public class ActividadDao extends DaoImplement<Actividad> {
     }
 
     public void loadGraph() throws Exception {
-        grafo = (GrafosEtiquetadosDirigidos<Tarea>) 
+        grafo = (GrafoFloydBellman<Tarea>) 
                 getConection()
                         .fromXML(new FileReader("files/grafo.json"));
         tareas.reset();
@@ -86,7 +87,7 @@ public class ActividadDao extends DaoImplement<Actividad> {
     /**
      * @param grafo the grafo to set
      */
-    public void setGrafo(GrafosEtiquetadosDirigidos<Tarea> grafo) {
+    public void setGrafo(GrafoFloydBellman<Tarea> grafo) {
         this.grafo = grafo;
     }
 

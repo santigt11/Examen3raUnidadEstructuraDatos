@@ -4,12 +4,21 @@
  */
 package vista;
 
+import controlador.DAO.grafosEjemplo.ActividadDao;
+import controlador.TDA.grafos.PaintGraph;
+import controlador.TDA.listas.Exception.EmptyException;
+import controlador.Utiles.UtilesFoto;
+import controlador.utiles.Utilidades;
+import javax.swing.JOptionPane;
+import vista.tablas.ModeloAdyacenciaFloyd;
+
 /**
  *
  * @author Santiago
  */
-public class FrmActividad extends javax.swing.JFrame {
-
+public class FrmGrafoTarea extends javax.swing.JFrame {
+    private ModeloAdyacenciaFloyd maf = new ModeloAdyacenciaFloyd();
+    private ActividadDao controlActividad=new ActividadDao();
     /**
      * Creates new form FrmActividad
      */
