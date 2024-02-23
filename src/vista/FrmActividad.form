@@ -29,7 +29,7 @@
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="btGuardar" min="-2" pref="121" max="-2" attributes="0"/>
+              <Component id="btAdyacencias" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
               <Component id="btCancelar" min="-2" pref="121" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -43,7 +43,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btAdyacencias" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="0" pref="14" max="32767" attributes="0"/>
           </Group>
@@ -173,13 +173,16 @@
         <Property name="text" type="java.lang.String" value="CANCELAR"/>
       </Properties>
     </Component>
-    <Component class="org.edisoncor.gui.button.ButtonAero" name="btGuardar">
+    <Component class="org.edisoncor.gui.button.ButtonAero" name="btAdyacencias">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="ff" red="33" type="rgb"/>
+          <Color blue="ff" green="0" red="0" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="GUARDAR"/>
+        <Property name="text" type="java.lang.String" value="AGREGAR ADYACENCIAS"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btAdyacenciasActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

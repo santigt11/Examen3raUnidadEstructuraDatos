@@ -29,7 +29,7 @@ public class ActividadDao extends DaoImplement<Actividad> {
         return tareas;
     }
 
-    public void setEscuelas(DynamicList<Tarea> lista) {
+    public void setTareas(DynamicList<Tarea> lista) {
         this.tareas = lista;
     }
 
@@ -40,7 +40,7 @@ public class ActividadDao extends DaoImplement<Actividad> {
         return actividad;
     }
 
-    public void setEscuela(Actividad actividad) {
+    public void setActividad(Actividad actividad) {
         this.actividad = actividad;
     }
 

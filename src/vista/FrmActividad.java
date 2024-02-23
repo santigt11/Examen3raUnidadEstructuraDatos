@@ -4,17 +4,75 @@
  */
 package vista;
 
+import controlador.DAO.grafosEjemplo.ActividadDao;
+import controlador.TDA.listas.DynamicList;
+import java.util.Date;
+import java.util.Random;
+import modelo.Tarea;
+
 /**
  *
  * @author Santiago
  */
 public class FrmActividad extends javax.swing.JFrame {
 
+    private ActividadDao actividadControl = new ActividadDao();
+    private DynamicList<Tarea> tareas = new DynamicList<>();
+
     /**
      * Creates new form FrmActividad
      */
     public FrmActividad() {
         initComponents();
+    }
+
+    public Boolean verificar() {
+        return (!txtDescripcion.getText().trim().isEmpty()
+                && !txtNombre.getText().trim().isEmpty()
+                && !txtNroTareas.getText().trim().isEmpty());
+    }
+
+    private void limpiar() {
+        try {
+            Utilvista.cargarcomboRolesL(cbxRol);
+        } catch (EmptyException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        txtDNI.setEnabled(true);
+        tbPersona.clearSelection();
+        txtApellidos.setText("");
+        txtCorreo.setText("");
+        txtDNI.setText("");
+        txtDireccion.setText("");
+        txtNombres.setText("");
+        txtTelefono.setText("");
+        cargarTabla();
+        personaControl.setPersona(null);
+        cbxRol.setSelectedIndex(0);
+    }
+
+    private void cargarDatosActividad() {
+        if (verificar()) {
+            actividadControl.getActividad().setNombre(txtNombre.getText());
+            actividadControl.getActividad().setNumTareas(Integer.parseInt(txtNroTareas.getText()));
+            actividadControl.getActividad().setDescripcion(txtDescripcion.getText());
+        }
+    }
+
+    private void generarTareas() {
+        Tarea tarea;
+        for (int i = 1; i <= Integer.parseInt(txtNroTareas.getText()); i++) {
+            tarea = new Tarea(i, "Descripcion " + i, generarFechaAleatoria(), generarFechaAleatoria(), "Titulo " + i);
+            tareas.add(tarea);
+        }
+    }
+
+    private static Date generarFechaAleatoria() {
+        Random random = new Random();
+        long inicio = System.currentTimeMillis() - 1000L * 60 * 60 * 24 * 365; // Hace un año
+        long fin = System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 365; // Dentro de un año
+        long fechaAleatoria = inicio + (long) (random.nextDouble() * (fin - inicio));
+        return new Date(fechaAleatoria);
     }
 
     /**
@@ -37,7 +95,7 @@ public class FrmActividad extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tbActividades = new javax.swing.JTable();
         btCancelar = new org.edisoncor.gui.button.ButtonAero();
-        btGuardar = new org.edisoncor.gui.button.ButtonAero();
+        btAdyacencias = new org.edisoncor.gui.button.ButtonAero();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -117,8 +175,13 @@ public class FrmActividad extends javax.swing.JFrame {
         btCancelar.setBackground(new java.awt.Color(255, 0, 0));
         btCancelar.setText("CANCELAR");
 
-        btGuardar.setBackground(new java.awt.Color(51, 255, 0));
-        btGuardar.setText("GUARDAR");
+        btAdyacencias.setBackground(new java.awt.Color(0, 0, 255));
+        btAdyacencias.setText("AGREGAR ADYACENCIAS");
+        btAdyacencias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAdyacenciasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -129,7 +192,7 @@ public class FrmActividad extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btAdyacencias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -141,12 +204,17 @@ public class FrmActividad extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btAdyacencias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 14, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btAdyacenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAdyacenciasActionPerformed
+        generarTareas();
+        new FrmGrafoTarea(actividadControl.getActividad(), tareas).setVisible(true);
+    }//GEN-LAST:event_btAdyacenciasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -184,8 +252,8 @@ public class FrmActividad extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.edisoncor.gui.button.ButtonAero btAdyacencias;
     private org.edisoncor.gui.button.ButtonAero btCancelar;
-    private org.edisoncor.gui.button.ButtonAero btGuardar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private org.edisoncor.gui.label.LabelHeader labelHeader1;
