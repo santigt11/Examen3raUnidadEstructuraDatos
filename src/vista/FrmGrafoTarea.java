@@ -25,7 +25,6 @@ import vista.tablas.ModeloAdyacenciaFloyd;
 public class FrmGrafoTarea extends javax.swing.JFrame {
     private ModeloAdyacenciaFloyd maf = new ModeloAdyacenciaFloyd();
     private ActividadDao controlActividad=new ActividadDao();
-    DynamicList<Tarea> tareas = new DynamicList<>();
     
     /**
      * Creates new form FrmActividad
@@ -33,12 +32,11 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
     public FrmGrafoTarea(Actividad actividad, DynamicList<Tarea> tareas) throws Exception {
         initComponents();
         controlActividad.setActividad(actividad);
-        this.tareas = tareas;
+        controlActividad.setEscuelas(tareas);
         this.setLocationRelativeTo(this);
         limpiar();
     }
     private void cargarTabla() throws Exception {
-
         try {
             maf.setGrafoTarea(controlActividad.getGrafo());
         } catch (EmptyException ex) {
@@ -51,12 +49,12 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
     }
     private void limpiar() throws Exception {
         try {
-            UtilVistaActividad.cargarComboTareas(tareas, cbxOrigen);
-            UtilVistaActividad.cargarComboTareas(tareas, cbxDestino);
+            UtilVistaActividad.cargarComboTareas(controlActividad.getTareas(), cbxOrigen);
+            UtilVistaActividad.cargarComboTareas(controlActividad.getTareas(), cbxDestino);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
-//        cargarTabla();
+        cargarTabla();
 
         controlActividad.setGrafo(null);
         cbxOrigen.setSelectedIndex(0);
