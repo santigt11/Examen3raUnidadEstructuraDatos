@@ -4,6 +4,8 @@
  */
 package prueba3.modelo;
 
+import ExamenU3EstructuraDatos.modelo.Tarea;
+
 /**
  *
  * @author Alejandro
