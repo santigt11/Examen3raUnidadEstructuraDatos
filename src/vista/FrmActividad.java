@@ -215,7 +215,7 @@ public class FrmActividad extends javax.swing.JFrame {
 
     private void btAdyacenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAdyacenciasActionPerformed
         generarTareas();
-        new FrmGrafoTarea(actividadControl.getActividad(), tareas).setVisible(true);
+        //new FrmGrafoTarea(actividadControl.getActividad(), tareas).setVisible(true);
     }//GEN-LAST:event_btAdyacenciasActionPerformed
 
     private void tbActividadesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbActividadesMouseClicked

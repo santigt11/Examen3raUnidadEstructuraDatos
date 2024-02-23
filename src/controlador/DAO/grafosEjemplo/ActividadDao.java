@@ -41,7 +41,7 @@ public class ActividadDao extends DaoImplement<Actividad> {
         return actividad;
     }
 
-    public void setEscuela(Actividad actividad) {
+    public void setActividad(Actividad actividad) {
         this.actividad = actividad;
     }
 

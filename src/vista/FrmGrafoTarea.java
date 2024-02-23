@@ -6,10 +6,13 @@ package vista;
 
 import controlador.DAO.grafosEjemplo.ActividadDao;
 import controlador.TDA.grafos.PaintGraph;
+import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
 import controlador.Utiles.UtilesFoto;
 import controlador.utiles.Utilidades;
 import javax.swing.JOptionPane;
+import modelo.Actividad;
+import modelo.Tarea;
 import vista.tablas.ModeloAdyacenciaFloyd;
 
 /**
@@ -19,11 +22,15 @@ import vista.tablas.ModeloAdyacenciaFloyd;
 public class FrmGrafoTarea extends javax.swing.JFrame {
     private ModeloAdyacenciaFloyd maf = new ModeloAdyacenciaFloyd();
     private ActividadDao controlActividad=new ActividadDao();
+    DynamicList<Tarea> tareas = new DynamicList<>();
+    
     /**
      * Creates new form FrmActividad
      */
-    public FrmGrafoTarea() {
+    public FrmGrafoTarea(Actividad actividad, DynamicList<Tarea> tareas) {
         initComponents();
+        controlActividad.setActividad(actividad);
+        this.tareas = tareas;
         this.setLocationRelativeTo(this);
         limpiar();
     }
