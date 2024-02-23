@@ -74,7 +74,7 @@ public class Tarea {
 
     @Override
     public String toString() {
-        return "tareas{" + "descripcion=" + descripcion + ", fechaInicio=" + fechaInicio + ", fechaFinal=" + fechaFinal + ", tituloTarea=" + tituloTarea + '}';
+        return "Tarea: " + getTituloTarea();
     }
     
     
