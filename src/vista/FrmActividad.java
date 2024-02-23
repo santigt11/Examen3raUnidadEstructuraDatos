@@ -46,6 +46,8 @@ public class FrmActividad extends javax.swing.JFrame {
             actividadControl.getActividad().setNombre(txtNombre.getText());
             actividadControl.getActividad().setNumTareas(Integer.parseInt(txtNroTareas.getText()));
             actividadControl.getActividad().setDescripcion(txtDescripcion.getText());
+            generarTareas();
+            JOptionPane.showMessageDialog(null, "Actividad cargada correctamente");
         }else{
             JOptionPane.showMessageDialog(null, "Complete los campos necesarios");
         }
@@ -214,7 +216,8 @@ public class FrmActividad extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btAdyacenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAdyacenciasActionPerformed
-        generarTareas();
+        cargarDatosActividad();
+        System.out.println(tareas);
         //new FrmGrafoTarea(actividadControl.getActividad(), tareas).setVisible(true);
     }//GEN-LAST:event_btAdyacenciasActionPerformed
 

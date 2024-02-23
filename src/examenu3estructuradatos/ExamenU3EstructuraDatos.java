@@ -4,6 +4,8 @@
  */
 package examenu3estructuradatos;
 
+import vista.FrmActividad;
+
 /**
  *
  * @author Santiago
@@ -14,7 +16,7 @@ public class ExamenU3EstructuraDatos {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        new FrmActividad().setVisible(true);
     }
     
 }
