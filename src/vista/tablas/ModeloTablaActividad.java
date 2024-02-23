@@ -7,6 +7,7 @@ package vista.tablas;
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
 import javax.swing.table.AbstractTableModel;
+import modelo.Actividad;
 
 /**
  *
@@ -36,7 +37,7 @@ public class ModeloTablaActividad extends AbstractTableModel {
                 case 1:
                     return (ac != null) ? ac.getDescripcion(): " ";
                 case 2:
-                    return (ac != null) ? ac.getNroTareas: "";
+                    return (ac != null) ? ac.getNumTareas(): "";
                 default:
                     return null;
             }

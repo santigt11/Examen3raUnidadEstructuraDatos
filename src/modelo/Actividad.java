@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package prueba3.modelo;
+package modelo;
 
 /**
  *
@@ -24,12 +24,8 @@ public class Actividad {
     }
     
     public Actividad() {
-        this.id = null;
-        this.nombre = null;
-        this.descripcion = null;
-        this.grafoTarea = null;
-        this.numTareas =null;
     }
+    
     public Integer getId() {
         return id;
     }
