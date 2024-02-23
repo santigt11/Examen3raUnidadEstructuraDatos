@@ -43,9 +43,8 @@ public class UtilVistaActividad {
 //    }
     
 
-    public static void cargarComboPoste(JComboBox cbx) throws Exception {
+    public static void cargarComboTareas(DynamicList<Tarea> list, JComboBox cbx) throws Exception {
         cbx.removeAllItems();
-        DynamicList<Tarea> list = new ActividadDao().getTareas();
         for (int i = 0; i < list.getLength(); i++) {
             cbx.addItem(list.getInfo(i));
         }

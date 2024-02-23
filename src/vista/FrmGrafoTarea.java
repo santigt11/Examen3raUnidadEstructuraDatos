@@ -44,7 +44,6 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
         } catch (EmptyException ex) {
             System.out.println(ex.getMessage());
         }
-
         maf.fireTableDataChanged();
         tblMostrar.setModel(maf);
         tblMostrar.updateUI();
@@ -52,13 +51,12 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
     }
     private void limpiar() throws Exception {
         try {
-            UtilVistaActividad.cargarComboPoste(cbxOrigen);
-            UtilVistaActividad.cargarComboPoste(cbxDestino);
-
+            UtilVistaActividad.cargarComboTareas(tareas, cbxOrigen);
+            UtilVistaActividad.cargarComboTareas(tareas, cbxDestino);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
-        cargarTabla();
+//        cargarTabla();
 
         controlActividad.setGrafo(null);
         cbxOrigen.setSelectedIndex(0);
@@ -104,10 +102,10 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
             if (o.intValue() == d.intValue()) {
                 JOptionPane.showMessageDialog(null, "Escoja escuelas diferentes");
             } else {
-                Double dist = UtilesVistaEscuela.CalcularDistanciaEscuela(ed.getList().getInfo(o), ed.getList().getInfo(d));
-                dist = UtilesFoto.redondear(dist);
-                ed.getGrafo().insertEdge(ed.getList().getInfo(o), ed.getList().getInfo(d), dist);
-                JOptionPane.showMessageDialog(null, "Adyacencia Generada");
+//                Double dist = UtilesVistaEscuela.CalcularDistanciaEscuela(ed.getList().getInfo(o), ed.getList().getInfo(d));
+//                dist = UtilesFoto.redondear(dist);
+//                ed.getGrafo().insertEdge(ed.getList().getInfo(o), ed.getList().getInfo(d), dist);
+//                JOptionPane.showMessageDialog(null, "Adyacencia Generada");
                 limpiar();
             }
         } catch (Exception e) {

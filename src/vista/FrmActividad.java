@@ -8,8 +8,6 @@ import controlador.DAO.grafosEjemplo.ActividadDao;
 import controlador.TDA.listas.DynamicList;
 import java.util.Date;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Tarea;
 
