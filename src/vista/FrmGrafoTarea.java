@@ -52,8 +52,8 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
     }
     private void limpiar() throws Exception {
         try {
-            UtilVistaActividad .cargarComboPoste(cbxOrigen);
-            UtilVistaActividad .cargarComboPoste(cbxDestino);
+            UtilVistaActividad.cargarComboPoste(cbxOrigen);
+            UtilVistaActividad.cargarComboPoste(cbxDestino);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);

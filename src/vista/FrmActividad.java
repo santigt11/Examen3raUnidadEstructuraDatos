@@ -8,6 +8,8 @@ import controlador.DAO.grafosEjemplo.ActividadDao;
 import controlador.TDA.listas.DynamicList;
 import java.util.Date;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Tarea;
 
@@ -218,7 +220,11 @@ public class FrmActividad extends javax.swing.JFrame {
     private void btAdyacenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAdyacenciasActionPerformed
         cargarDatosActividad();
         System.out.println(tareas);
-        //new FrmGrafoTarea(actividadControl.getActividad(), tareas).setVisible(true);
+        try {
+            new FrmGrafoTarea(actividadControl.getActividad(), tareas).setVisible(true);
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        }
     }//GEN-LAST:event_btAdyacenciasActionPerformed
 
     private void tbActividadesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbActividadesMouseClicked
