@@ -61,7 +61,7 @@ public class ActividadDao extends DaoImplement<Actividad> {
     /**
      * @return the grafo
      */
-    public GrafosEtiquetadosDirigidos<Tarea> getGrafo() throws Exception {
+    public GrafoFloydBellman<Tarea> getGrafo() throws Exception {
         if (grafo == null) {
             DynamicList<Tarea> list = getTareas();
             if (!list.isEmpty()) {

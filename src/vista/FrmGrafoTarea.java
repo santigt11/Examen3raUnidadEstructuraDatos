@@ -27,10 +27,10 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
         this.setLocationRelativeTo(this);
         limpiar();
     }
-    private void cargarTabla() {
+    private void cargarTabla() throws Exception {
 
         try {
-            maf.setGrafo1(pozoControl.getGrafo());
+            maf.setGrafoTarea(controlActividad.getGrafo());
         } catch (EmptyException ex) {
             System.out.println(ex.getMessage());
         }
@@ -50,7 +50,7 @@ public class FrmGrafoTarea extends javax.swing.JFrame {
         }
         cargarTabla();
 
-        pozoControl.setPozo(null);
+        controlActividad.setGrafo(null);
         cbxOrigen.setSelectedIndex(0);
         cbxDestino.setSelectedIndex(0);
     }
