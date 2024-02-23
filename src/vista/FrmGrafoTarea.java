@@ -4,6 +4,7 @@
  */
 package vista;
 
+import controlador.DAO.grafosEjemplo.ActividadDao;
 import controlador.TDA.grafos.PaintGraph;
 import controlador.TDA.listas.Exception.EmptyException;
 import controlador.Utiles.UtilesFoto;
@@ -17,6 +18,7 @@ import vista.tablas.ModeloAdyacenciaFloyd;
  */
 public class FrmGrafoTarea extends javax.swing.JFrame {
     private ModeloAdyacenciaFloyd maf = new ModeloAdyacenciaFloyd();
+    private ActividadDao controlActividad=new ActividadDao();
     /**
      * Creates new form FrmActividad
      */
