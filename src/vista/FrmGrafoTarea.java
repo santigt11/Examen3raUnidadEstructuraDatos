@@ -4,18 +4,132 @@
  */
 package vista;
 
+import controlador.TDA.grafos.PaintGraph;
+import controlador.TDA.listas.Exception.EmptyException;
+import controlador.Utiles.UtilesFoto;
+import controlador.utiles.Utilidades;
+import javax.swing.JOptionPane;
+import vista.tablas.ModeloAdyacenciaFloyd;
+
 /**
  *
  * @author Santiago
  */
-public class FrmActividad extends javax.swing.JFrame {
-
+public class FrmGrafoTarea extends javax.swing.JFrame {
+    private ModeloAdyacenciaFloyd maf = new ModeloAdyacenciaFloyd();
     /**
      * Creates new form FrmActividad
      */
-    public FrmActividad() {
+    public FrmGrafoTarea() {
         initComponents();
+        this.setLocationRelativeTo(this);
+        limpiar();
     }
+    private void cargarTabla() {
+
+        try {
+            maf.setGrafo1(pozoControl.getGrafo());
+        } catch (EmptyException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        maf.fireTableDataChanged();
+        tblMostrar.setModel(maf);
+        tblMostrar.updateUI();
+
+    }
+    private void limpiar() {
+        try {
+            UtilVistaPozo.cargarComboPoste(cbxOrigen);
+            UtilVistaPozo.cargarComboPoste(cbxDestino);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        cargarTabla();
+
+        pozoControl.setPozo(null);
+        cbxOrigen.setSelectedIndex(0);
+        cbxDestino.setSelectedIndex(0);
+    }
+
+    private void load() throws Exception {
+        try {
+            int i = JOptionPane.showConfirmDialog(null, "Esta seguro de cargar el grafo?");
+            if (i == JOptionPane.OK_OPTION) {
+                System.out.println("HoLA");
+                pozoControl.loadGrapgFloydBellman();
+                limpiar();
+                JOptionPane.showMessageDialog(null, "Grafo cargado con exito");
+            }
+        } catch (Exception e) {
+        }
+
+    }
+
+    public void guardarGrafo() {
+        try {
+            int i = JOptionPane.showConfirmDialog(null, "Esta seguro de guardar?",
+                    "Advertencia", JOptionPane.OK_CANCEL_OPTION);
+
+            if (i == JOptionPane.OK_OPTION) {
+                if (pozoControl.getGrafo() != null) {
+                    pozoControl.guardarGrafoFloydBellman();
+                    JOptionPane.showMessageDialog(null, "Grafo guardado");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se puede guardar un grafo vacio");
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    private void Adyacencia() {
+        try {
+            Integer o = cbxOrigen.getSelectedIndex();
+            Integer d = cbxDestino.getSelectedIndex();
+            if (o.intValue() == d.intValue()) {
+                JOptionPane.showMessageDialog(null, "Escoja escuelas diferentes");
+            } else {
+                Double dist = UtilesVistaEscuela.CalcularDistanciaEscuela(ed.getList().getInfo(o), ed.getList().getInfo(d));
+                dist = UtilesFoto.redondear(dist);
+                ed.getGrafo().insertEdge(ed.getList().getInfo(o), ed.getList().getInfo(d), dist);
+                JOptionPane.showMessageDialog(null, "Adyacencia Generada");
+                limpiar();
+            }
+        } catch (Exception e) {
+            System.out.println(":c");
+        }
+    }
+
+    private void mostrarGrafo() throws Exception {
+        PaintGraph p = new PaintGraph();
+        p.updateFile(pozoControl.getGrafo());
+        Utilidades.abrirNavegadorPredeterminadorWindows("d3/grafo.html");
+    }
+    private void buscar() throws Exception {
+        if ("Busqueda_Profundidad".equals(cbxBuscar.getSelectedItem().toString())) {
+            System.out.println("Busqueda_Profundidad");
+            JOptionPane.showMessageDialog(null, pozoControl.getGrafo().DFS(1));
+        } else if ("Busqueda_Anchura".equals(cbxBuscar.getSelectedItem().toString())) {
+            System.out.println("Busqueda_Anchura");
+            JOptionPane.showMessageDialog(null,pozoControl.getGrafo().BFS());
+        }
+    }
+    private void mostrarGrafoFloyd() throws EmptyException, Exception {
+        if ("Bellman_Ford".equals(cbxGrafo.getSelectedItem().toString())) {
+            System.out.println("Bellman_Ford");
+            JOptionPane.showMessageDialog(null, pozoControl.getGrafo().encontrarRutaMasCortaBellman(cbxOrigen.getSelectedIndex() + 1, cbxDestino.getSelectedIndex() + 1));
+        } else if ("Floyd".equals(cbxGrafo.getSelectedItem().toString())) {
+            System.out.println("Floyd");
+            JOptionPane.showMessageDialog(null, pozoControl.getGrafo().encontrarRutaMasCorta(cbxOrigen.getSelectedIndex() + 1, cbxDestino.getSelectedIndex() + 1));
+        }
+
+    }
+    
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,33 +143,47 @@ public class FrmActividad extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         labelHeader1 = new org.edisoncor.gui.label.LabelHeader();
         labelRound1 = new org.edisoncor.gui.label.LabelRound();
-        txtNombre = new org.edisoncor.gui.textField.TextField();
         labelRound2 = new org.edisoncor.gui.label.LabelRound();
-        txtDescripcion = new org.edisoncor.gui.textField.TextField();
         labelRound3 = new org.edisoncor.gui.label.LabelRound();
-        txtNroTareas = new org.edisoncor.gui.textField.TextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tbActividades = new javax.swing.JTable();
-        btCancelar = new org.edisoncor.gui.button.ButtonAero();
+        tblMostrar = new javax.swing.JTable();
+        cbxOrigen = new javax.swing.JComboBox<>();
+        cbxDestino = new javax.swing.JComboBox<>();
+        btnAdyacencia = new org.edisoncor.gui.button.ButtonAero();
+        cbxGrafo = new javax.swing.JComboBox<>();
+        labelRound4 = new org.edisoncor.gui.label.LabelRound();
+        btnRuta = new javax.swing.JButton();
         btGuardar = new org.edisoncor.gui.button.ButtonAero();
+        btCancelar1 = new org.edisoncor.gui.button.ButtonAero();
+        labelRound5 = new org.edisoncor.gui.label.LabelRound();
+        cbxBuscar = new javax.swing.JComboBox<>();
+        btnBuscar = new javax.swing.JButton();
+        btnAdyacencia1 = new org.edisoncor.gui.button.ButtonAero();
+        btGuardar1 = new org.edisoncor.gui.button.ButtonAero();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         labelHeader1.setText("Guardar actividades");
+        jPanel1.add(labelHeader1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, 720, -1));
 
         labelRound1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelRound1.setText("Nombre:");
+        labelRound1.setText("Origen");
         labelRound1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jPanel1.add(labelRound1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 46, -1, -1));
 
         labelRound2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelRound2.setText("Descripcion:");
+        labelRound2.setText("Destino:");
         labelRound2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jPanel1.add(labelRound2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 40, -1, -1));
 
         labelRound3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelRound3.setText("Numero de Tareas:");
+        labelRound3.setText("MÉTODOS PARA BUSCAR GRAFOS SIN CONEXIONES");
         labelRound3.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jPanel1.add(labelRound3, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 130, -1, -1));
 
-        tbActividades.setModel(new javax.swing.table.DefaultTableModel(
+        tblMostrar.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -66,87 +194,107 @@ public class FrmActividad extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tbActividades);
+        jScrollPane1.setViewportView(tblMostrar);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(labelHeader1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(labelRound1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(labelRound2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(54, 54, 54)
-                        .addComponent(labelRound3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtNroTareas, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 80, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(labelHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelRound1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelRound3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNroTareas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelRound2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 667, 190));
 
-        btCancelar.setBackground(new java.awt.Color(255, 0, 0));
-        btCancelar.setText("CANCELAR");
+        cbxOrigen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxOrigenActionPerformed(evt);
+            }
+        });
+        jPanel1.add(cbxOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 150, -1));
+
+        jPanel1.add(cbxDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 40, 150, -1));
+
+        btnAdyacencia.setBackground(new java.awt.Color(255, 0, 0));
+        btnAdyacencia.setText("Generar Adyacencias");
+        jPanel1.add(btnAdyacencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 40, -1, -1));
+
+        cbxGrafo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Floyd", "Bellman_Ford" }));
+        jPanel1.add(cbxGrafo, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 90, 160, -1));
+
+        labelRound4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelRound4.setText("Tipo de grafo a trabajar:");
+        labelRound4.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jPanel1.add(labelRound4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
+
+        btnRuta.setText("MOSTRAR RUTA");
+        btnRuta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRutaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnRuta, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 230, -1));
 
         btGuardar.setBackground(new java.awt.Color(51, 255, 0));
         btGuardar.setText("GUARDAR");
+        jPanel1.add(btGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 220, 121, -1));
+
+        btCancelar1.setBackground(new java.awt.Color(255, 0, 0));
+        btCancelar1.setText("CANCELAR");
+        jPanel1.add(btCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 470, 121, -1));
+
+        labelRound5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelRound5.setText("CLIC PARA VER LA RUTA MAS CORTA:");
+        labelRound5.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jPanel1.add(labelRound5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
+
+        cbxBuscar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Busqueda_Anchura", "Busqueda_Profundidad" }));
+        jPanel1.add(cbxBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 160, -1, -1));
+
+        btnBuscar.setText("BUSCAR");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 160, 110, -1));
+
+        btnAdyacencia1.setBackground(new java.awt.Color(255, 0, 0));
+        btnAdyacencia1.setText("VER GRAFO");
+        jPanel1.add(btnAdyacencia1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, -1, -1));
+
+        btGuardar1.setBackground(new java.awt.Color(0, 255, 255));
+        btGuardar1.setText("Cargar Grafo");
+        btGuardar1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jPanel1.add(btGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 220, 121, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 14, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cbxOrigenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxOrigenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxOrigenActionPerformed
+
+    private void btnRutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRutaActionPerformed
+
+        try {
+            mostrarGrafoFloyd();
+        } catch (Exception ex) {
+            System.out.println("Hubo un error" + ex.getMessage());
+        }
+
+    }//GEN-LAST:event_btnRutaActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        try {
+            buscar();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -165,36 +313,45 @@ public class FrmActividad extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmGrafoTarea.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmGrafoTarea.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmGrafoTarea.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmActividad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmGrafoTarea.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmActividad().setVisible(true);
+                new FrmGrafoTarea().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private org.edisoncor.gui.button.ButtonAero btCancelar;
+    private org.edisoncor.gui.button.ButtonAero btCancelar1;
     private org.edisoncor.gui.button.ButtonAero btGuardar;
+    private org.edisoncor.gui.button.ButtonAero btGuardar1;
+    private org.edisoncor.gui.button.ButtonAero btnAdyacencia;
+    private org.edisoncor.gui.button.ButtonAero btnAdyacencia1;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnRuta;
+    private javax.swing.JComboBox<String> cbxBuscar;
+    private javax.swing.JComboBox<String> cbxDestino;
+    private javax.swing.JComboBox<String> cbxGrafo;
+    private javax.swing.JComboBox<String> cbxOrigen;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private org.edisoncor.gui.label.LabelHeader labelHeader1;
     private org.edisoncor.gui.label.LabelRound labelRound1;
     private org.edisoncor.gui.label.LabelRound labelRound2;
     private org.edisoncor.gui.label.LabelRound labelRound3;
-    private javax.swing.JTable tbActividades;
-    private org.edisoncor.gui.textField.TextField txtDescripcion;
-    private org.edisoncor.gui.textField.TextField txtNombre;
-    private org.edisoncor.gui.textField.TextField txtNroTareas;
+    private org.edisoncor.gui.label.LabelRound labelRound4;
+    private org.edisoncor.gui.label.LabelRound labelRound5;
+    private javax.swing.JTable tblMostrar;
     // End of variables declaration//GEN-END:variables
 }
