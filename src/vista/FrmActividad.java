@@ -8,6 +8,7 @@ import controlador.DAO.grafosEjemplo.ActividadDao;
 import controlador.TDA.listas.DynamicList;
 import java.util.Date;
 import java.util.Random;
+import javax.swing.JOptionPane;
 import modelo.Tarea;
 
 /**
@@ -33,11 +34,6 @@ public class FrmActividad extends javax.swing.JFrame {
     }
 
     private void limpiar() {
-        try {
-            Utilvista.cargarcomboRolesL(cbxRol);
-        } catch (EmptyException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-        }
         txtDNI.setEnabled(true);
         tbPersona.clearSelection();
         txtApellidos.setText("");
@@ -56,6 +52,8 @@ public class FrmActividad extends javax.swing.JFrame {
             actividadControl.getActividad().setNombre(txtNombre.getText());
             actividadControl.getActividad().setNumTareas(Integer.parseInt(txtNroTareas.getText()));
             actividadControl.getActividad().setDescripcion(txtDescripcion.getText());
+        }else{
+            JOptionPane.showMessageDialog(null, "Complete los campos necesarios");
         }
     }
 
